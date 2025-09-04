@@ -62,6 +62,12 @@ uv run ruff format .                      # format code
 
 ## 10. PR & Branch Workflow
 - Branch prefix: `feat/`, `fix/`, `chore/`, `refactor/`.
+- Commit messages MUST follow Conventional Commits: `<type>(<optional scope>): <lowercase imperative description>`.
+	- Allowed baseline types: `feat`, `fix`, `refactor`, `perf`, `style`, `test`, `docs`, `build`, `ops`, `chore`.
+	- Use `!` before `:` to denote breaking change (e.g., `feat(api)!: remove legacy endpoint`). Provide a `BREAKING CHANGE:` footer explanation when used.
+	- Description: imperative, present tense, no leading capital, no trailing period.
+	- Prefer a scope only when it adds clarity (package, module, or domain); keep it short.
+- Split unrelated logical changes into separate commits (enforced expectation for review hygiene). A commit may modify code + related docs/tests if tightly coupled.
 - Keep diffs < ~400 LOC (excluding generated files) when possible.
 - Include updated tests + doc snippets (update this STYLEGUIDE if conventions shift).
 
