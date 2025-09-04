@@ -1,51 +1,69 @@
 # Copilot Coding Agent Instructions
 
-Status: Repository scaffold (Python project not yet initialized). This file gives high-level AI contribution rules. Language/tooling specifics (Python, etc.) live in language style guide files referenced from `LLM.md` and must NOT be duplicated here.
+Concise guardrails for AI contributions in this repository. Technical Python specifics live in `src/LLM.md`; do not duplicate—reference instead.
 
-## Mandatory Read First
-Before writing or editing code you MUST read root `LLM.md`. That file lists active language guides (e.g., `src/LLM.md` for Python) which you must also read before touching related files. If guidance conflicts: technical style (language guide) > orchestration (`LLM.md`) > this file. When introducing or modifying a convention, update the relevant language guide and (if process changes) `LLM.md` in the same PR.
+## Read Order (ALWAYS)
+1. `src/LLM.md` (Python style/tooling)
+2. Root `LLM.md` (orchestration + remembered rules)
+3. Local directory `LLM.md` (if present)
+4. Relevant `README.md` (ensure directory tree freshness & alignment)
 
-## Scope of This File
-This document focuses on: AI workflow guardrails, change discipline, and when to update the style guide. It intentionally omits concrete commands already captured in `src/LLM.md`.
+If conflicting guidance: `src/LLM.md` > local `LLM.md` > root `LLM.md` > this file.
 
-## Core AI Workflow
-1. Read `LLM.md` (always re-check if repo recently changed) plus any language guides it references.
-2. If editing files in a subdirectory containing its own `LLM.md`, read that before changes.
-3. Search for existing patterns before adding new modules or dependencies.
-3. Keep edits minimal & focused; separate unrelated concerns into distinct PRs.
-4. Add or update tests for every behavioral change (happy path + edge case minimum) following locations described in the style guide.
-5. Run lint + tests locally prior to completion (commands in style guide).
+## Repository Shape (Current)
+Minimal scaffold: single package `src/copilot_agents/` (empty `__init__.py`). Style & workflow rules already established; future modules (logging, config) to follow documented placeholders in `src/LLM.md` (see Future Sections).
 
-## Dependency & Tooling Governance
--- Do not introduce alternative version managers, env managers, or formatters beyond those allowed in the applicable language guide(s).
-- Any new third-party library requires: brief rationale in PR description + test coverage + style guide update if it changes conventions.
+## Core Workflow (Happy Path)
+1. Gather context (search/read) before changing anything.
+2. Plan small, single-purpose change (avoid bundling unrelated edits).
+3. Edit via patch tool; never commit/push unless explicitly requested by user (see remembered rule).
+4. Run: `uv sync` (if deps changed) -> `uv run ruff check . --fix` -> `uv run ruff format .` -> `uv run pytest -q`.
+5. Add/update tests for any new public API (happy + edge case).
+6. Prepare Conventional Commit message; await explicit commit instruction.
 
-## Structural Changes
--- When adding new top-level packages, update the appropriate language guide future sections list.
-- If refactoring cross-cutting utilities (logging, config, error handling), ensure backward compatibility or note breakage explicitly.
+## Conventions (Project-Specific)
+- Single-source layout: ALL importable code under `src/`.
+- Dependency management: `uv` only (no pip/poetry/pip-tools). Never hand-edit `uv.lock`.
+- Env loading: `direnv` (`.envrc` / `.envrc.example`); never introduce `.env` files.
+- Lint/format: Ruff is authoritative (no Black/isort).
+- Commit format: Conventional Commits (types: feat, fix, refactor, perf, style, test, docs, build, ci, ops, chore; `!` for breaking).
+- Directory Tree in any README must be regenerated & aligned (exclude `.gitignore` paths; align `#` comment column).
 
-## Configuration & Secrets
-- Never commit secrets; extend `.env.example` when adding required environment variables. Reference only through central config module (pattern defined in style guide future section).
+## External Knowledge Usage
+- Library/API details: use Context7 tools (`resolve-library-id` then `get-library-docs`) before coding against unfamiliar libs.
+- GitHub repo references: fetch real source (repo search) not memory.
+- Web knowledge: use fetch/puppeteer; cite source briefly.
 
-## Documentation Hygiene
-- Keep this file under ~60 lines; remove stale guidance proactively.
--- Any style or command drift detected: fix the source of truth language guide first, then adjust this file only if meta references change.
- - When referencing repository files in comments, PRs, or AI-generated text: never list files or exact paths that are matched by `.gitignore`. If the ignored files are relevant, reference the ignore pattern or directory and note that contents are ignored (do not expose or enumerate them).
+## Change Control & Scope
+- One logical concern per commit (code + directly related tests/docs only).
+- Large refactors: stage as incremental PRs (≤ ~400 LOC diff guideline).
+- Introduce new dependency only with justification + tests + style guide update (if convention-level impact).
 
-## Quality Gates (Summarized)
-- Lint clean, formatted code.
-- Tests pass (unit + integration if touched components have integration coverage).
-- No unused or unjustified dependencies.
-- Commits reference introduced conventions when applicable.
+## Testing Expectations
+- Minimum: each new function/class = 1 happy + 1 edge case test.
+- No network I/O in unit tests; stub/fake externally.
+- Mark slower/external style tests with `@pytest.mark.integration` (directory to be added when such tests exist).
 
-## Escalation / Ambiguity Handling
-If a task requires a new convention (e.g., background job runner abstraction) and no precedent exists: (a) implement minimal viable pattern, (b) document it in the appropriate language guide (e.g., `src/LLM.md`), (c) reference the new section in the PR description.
+## Documentation Responsibilities
+- When structural changes occur (new directories/files), update root `README.md` tree in same PR.
+- If adding cross-cutting convention, update `src/LLM.md` AND reference in PR description.
 
-## Quick Checklist for Any PR
--- [ ] Followed relevant language guide(s) referenced by `LLM.md`.
-- [ ] Updated/added tests.
-- [ ] Ran lint & format.
--- [ ] Updated applicable language guide(s) if conventions changed.
-- [ ] No secret leakage; `.env.example` updated if needed.
+## Ambiguity Handling
+If no precedent: implement minimal viable pattern, document it (`src/LLM.md` Future Sections), and clearly annotate rationale in PR body. Defer broader design unless requested.
 
-End of instructions. Operational language/tooling details live in language guide files referenced from `LLM.md`.
+## Quality Gate Before Requesting Commit
+- Ruff: clean (no unfixable errors) & formatted.
+- Tests: pass locally (`uv run pytest -q`).
+- README trees (changed ones) reflect actual FS.
+- No orphaned or unused imports / dependencies.
+- No secrets or ignored file listings.
+
+## Quick PR Preparation Checklist
+- [ ] Context read (LLM.md hierarchy + relevant README)
+- [ ] Minimal focused change
+- [ ] Tests updated/added
+- [ ] Ruff lint & format clean
+- [ ] Docs/trees synced (if affected)
+- [ ] Conventional Commit message drafted (not committed yet)
+
+End of instructions.
