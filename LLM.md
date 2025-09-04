@@ -7,10 +7,10 @@ Purpose: Provide a compact, machine-readable prompt and local rules for any LLM 
 PROMPT: You are a coding assistant (GitHub Copilot) that will make edits, run checks, and create PRs for this repository. Follow these rules strictly.
 
 1. Read order and precedence
-- Always read `/LLM-PYTHON.md` first for language/tooling conventions.
+- Always read `/src/LLM.md` first for language/tooling conventions.
 - Then read `/.github/copilot-instructions.md` for AI workflow guardrails.
 - If a directory contains `LLM.md`, read it before modifying files in that directory or any files under it.
-When merging conflicting guidance, directory-local `LLM.md` overrides root `LLM.md`, and `LLM-PYTHON.md` wins over `LLM.md` for technical style rules.
+When merging conflicting guidance, directory-local `LLM.md` overrides root `LLM.md`, and `/src/LLM.md` (Python style) wins over root for technical style rules.
 
 2. When to follow subdirectory `LLM.md`
 - Default: for any file under `<subdirectory>/`, follow instructions in `<subdirectory>/LLM.md`.
@@ -28,10 +28,10 @@ When merging conflicting guidance, directory-local `LLM.md` overrides root `LLM.
 - `src/` — all Python source code MUST live under this directory. Do not place importable packages/modules at repo root.
 - `tests/unit/` and `tests/integration/` — test suites.
 - `.github/` — CI and AI instruction files.
-- `LLM-PYTHON.md` — authoritative project style and tooling guide.
-- `LLM.md` — per-directory LLM guidance (optional).
-- PYTHONPATH: always include `./src` (e.g., `PYTHONPATH=./src uv run pytest -q`). Prefer configuring via environment (see `.env.example` if present) rather than relative imports hacks.
- - Environment management: Use `direnv` with a committed template (`.envrc.example`) plus a developer-specific `.envrc` (may contain secrets). DO NOT introduce `.env` or `.env.*` files; they are disallowed.
+- `src/LLM.md` — authoritative project style and tooling guide (Python + automation conventions).
+- `LLM.md` — per-directory LLM guidance (optional in subdirectories).
+- PYTHONPATH: always include `./src` (e.g., `PYTHONPATH=./src uv run pytest -q`). Prefer configuring via environment (see `.envrc.example` if present) rather than relative imports hacks.
+- Environment management: Use `direnv` with a committed template (`.envrc.example`) plus a developer-specific `.envrc` (may contain secrets). DO NOT introduce `.env` or `.env.*` files; they are disallowed.
 
 5. Commit & PR conventions for LLM
 - Keep diffs small and focused.
@@ -40,10 +40,10 @@ When merging conflicting guidance, directory-local `LLM.md` overrides root `LLM.
 - Document any deviations from global rules in the PR body.
 
 6. Maintenance rule
-- If you edit `LLM-PYTHON.md`, also update `/.github/copilot-instructions.md` to reference the change when it affects AI workflows.
+- If you edit `src/LLM.md`, also update `/.github/copilot-instructions.md` to reference the change when it affects AI workflows.
 
 7. Python instruction escalation ("remember" / important)
-- If a user provides a new instruction that includes the word "remember" and it concerns Python code style, tooling, structure, testing, dependencies, or execution, you MUST also add (or merge) that rule into `LLM-PYTHON.md` (updating its revision history) and then follow it thereafter.
+- If a user provides a new instruction that includes the word "remember" and it concerns Python code style, tooling, structure, testing, dependencies, or execution, you MUST also add (or merge) that rule into `src/LLM.md` (updating its revision history) and then follow it thereafter.
 - If the user explicitly marks an instruction as "important" or says it must "always" be followed (and it's Python-related), treat it as a MUST-FOLLOW rule: do not ignore or downgrade it unless the user later revokes it. Record inclusion in the PR description.
 - Avoid duplicating semantically equivalent guidance: search existing sections first; if overlap exists, refine or extend instead of repeating.
 - Non-Python "remember" instructions belong in the most relevant `LLM.md` (root or subdirectory) only.
@@ -63,3 +63,5 @@ If you find any `LLM.md` files in subdirectories, add a reference to them in thi
 ### Additional remembered instructions
 - (2025-09-04) MUST-FOLLOW: Maintain cross-file deduplication across `LLM.md` and all `**/LLM*.md` files. Before adding a new rule, search existing LLM guidance files; if a similar rule exists, refine or reference it instead of duplicating. Prefer a single authoritative location per rule and cross-reference rather than copy.
 - (2025-09-04) MUST-FOLLOW: Do not create or rely on `.env` / `.env.*` files. Manage all runtime environment variables via `direnv` (`.envrc`) with a tracked `.envrc.example` providing placeholder values.
+- (2025-09-04) MUST-FOLLOW: For Python library details, always employ Context7 tools (resolve-library-id then get-library-docs) instead of guessing or relying solely on memory; document fallback if docs cannot be retrieved.
+- (2025-09-04) MUST-FOLLOW: When referenced to a GitHub repository for more information about a tool/library, use GitHub repo search tools (not guesses) to inspect code/docs. For arbitrary web pages, use the fetch or puppeteer tools to retrieve/inspect content instead of relying on memory.
