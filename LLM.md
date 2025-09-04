@@ -30,8 +30,8 @@ When merging conflicting guidance, directory-local `LLM.md` overrides root `LLM.
 - `.github/` — CI and AI instruction files.
 - `src/LLM.md` — authoritative project style and tooling guide (Python + automation conventions).
 - `LLM.md` — per-directory LLM guidance (optional in subdirectories).
-- PYTHONPATH: always include `./src` (e.g., `PYTHONPATH=./src uv run pytest -q`). Prefer configuring via environment (see `.envrc.example` if present) rather than relative imports hacks.
-- Environment management: Use `direnv` with a committed template (`.envrc.example`) plus a developer-specific `.envrc` (may contain secrets). DO NOT introduce `.env` or `.env.*` files; they are disallowed.
+- PYTHONPATH: always include `./src` (e.g., `PYTHONPATH=./src uv run pytest -q`). Prefer configuring via environment (see `.envrc` if present) rather than relative imports hacks.
+- Environment management: Use `direnv` with a developer-specific `.envrc` (may contain secrets). DO NOT introduce `.env` or `.env.*` files; they are disallowed.
 
 5. Commit & PR conventions for LLM
 - Keep diffs small and focused.
@@ -102,7 +102,7 @@ Validation checklist before committing a README change:
 
 ### Additional remembered instructions
 - (2025-09-04) MUST-FOLLOW: Maintain cross-file deduplication across `LLM.md` and all `**/LLM*.md` files. Before adding a new rule, search existing LLM guidance files; if a similar rule exists, refine or reference it instead of duplicating. Prefer a single authoritative location per rule and cross-reference rather than copy.
-- (2025-09-04) MUST-FOLLOW: Do not create or rely on `.env` / `.env.*` files. Manage all runtime environment variables via `direnv` (`.envrc`) with a tracked `.envrc.example` providing placeholder values.
+- (2025-09-04) MUST-FOLLOW: Do not create or rely on `.env` / `.env.*` files. Manage all runtime environment variables via `direnv` (`.envrc`) only.
 - (2025-09-04) MUST-FOLLOW: For Python library details, always employ Context7 tools (resolve-library-id then get-library-docs) instead of guessing or relying solely on memory; document fallback if docs cannot be retrieved.
 - (2025-09-04) MUST-FOLLOW: When referenced to a GitHub repository for more information about a tool/library, use GitHub repo search tools (not guesses) to inspect code/docs. For arbitrary web pages, use the fetch or puppeteer tools to retrieve/inspect content instead of relying on memory.
 - (2025-09-04) MUST-FOLLOW: In all README directory tree listings, vertically align the first `#` comment delimiter across lines by padding spaces after the path segment; every entry still ends with `# <summary>`.
@@ -112,3 +112,12 @@ Validation checklist before committing a README change:
 - (2025-09-04) MUST-FOLLOW: Before producing or modifying documentation, ALWAYS read the nearest `LLM.md` and `README.md` (root and relevant subdirectories) and ensure any Directory Tree sections reflect actual current filesystem state (excluding `.gitignore` matches) with aligned `#` comments.
 - (2025-09-04) MUST-FOLLOW: Do NOT create commits or push changes unless the user explicitly instructs; prepare edits and await explicit commit/push request.
 - (2025-09-04) MUST-FOLLOW: Always refresh (regenerate & realign) the Directory Tree section in any `README.md` you modify before completing the task; never leave a stale tree.
+ - (2025-09-04) MUST-FOLLOW: Do not assume or enable GPU acceleration in any workflow unless explicitly instructed by the user.
+ - (2025-09-04) MUST-FOLLOW: No `LLM.md` file may contain a "Future Enhancements" or similar speculative section; remove existing ones and document substantive changes instead via revision history.
+ - (2025-09-04) Remember: Engage (start/stop) Colima ONLY on macOS (Darwin). Never run Colima commands on non-macOS hosts; detect via `uname` before invoking.
+ - (2025-09-04) Remember: For any Colima-related task, consult the official GitHub repository (https://github.com/abiosoft/colima) using repo search tools before providing guidance (verify flags/commands from source, not memory).
+ - (2025-09-04) Remember: You may detect whether Colima is installed/running, but NEVER attempt to install Colima automatically; installation must be explicitly user-driven.
+ - (2025-09-04) MUST-FOLLOW: When a task involves LiteLLM, Docker (docker-compose), Ollama, or deployment topics, first read `deploy/LLM.md` and follow its guidance before proceeding (supplements, does not replace, root and src LLM rules).
+
+## Subdirectory LLM references
+- `deploy/LLM.md` — Deployment conventions for running LiteLLM via docker-compose (Postgres-only stack, wait gate for Ollama, optional Colima usage on macOS). Follow these when operating or modifying files under `deploy/`.

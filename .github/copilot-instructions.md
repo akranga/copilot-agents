@@ -24,7 +24,7 @@ Minimal scaffold: single package `src/copilot_agents/` (empty `__init__.py`). St
 ## Conventions (Project-Specific)
 - Single-source layout: ALL importable code under `src/`.
 - Dependency management: `uv` only (no pip/poetry/pip-tools). Never hand-edit `uv.lock`.
-- Env loading: `direnv` (`.envrc` / `.envrc.example`); never introduce `.env` files.
+- Env loading: `direnv` (`.envrc`); never introduce `.env` files.
 - Lint/format: Ruff is authoritative (no Black/isort).
 - Commit format: Conventional Commits (types: feat, fix, refactor, perf, style, test, docs, build, ci, ops, chore; `!` for breaking).
 - Directory Tree in any README must be regenerated & aligned (exclude `.gitignore` paths; align `#` comment column).

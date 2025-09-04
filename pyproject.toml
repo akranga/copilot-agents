@@ -15,7 +15,12 @@ classifiers = [
 ]
 
 # No runtime dependencies yet; add via `uv add <pkg>`
-dependencies = []
+dependencies = [
+    "litellm[proxy]",
+    "gradio",
+    "click",
+    "httpx>=0.28.1",
+]
 
 [project.urls]
 Homepage = "https://github.com/akranga/copilot-agents"

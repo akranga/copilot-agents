@@ -21,7 +21,7 @@ Purpose: Provide precise, tool-driven assistance for Python development in this 
 - Lint/format with Ruff (no Black/isort). Run `uv run ruff check . --fix` then `uv run ruff format .` when modifying code.
 - Tests: `pytest` via `uv run pytest -q`. Add unit + edge test for each new public function.
 - PYTHONPATH must include `./src`; rely on configuration or environment rather than modifying `sys.path`.
-- No `.env` files; environment via `direnv` `.envrc` + tracked `.envrc.example` (never commit secrets).
+- No `.env` files; environment via `direnv` `.envrc` (never commit secrets).
 
 ## Library / Dependency Guidance
 - Prefer stdlib first; justify new third-party additions (add minimal dependency, update tests, cite reason in PR).

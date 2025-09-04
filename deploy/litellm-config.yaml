@@ -1,0 +1,58 @@
+model_list:
+- model_name: gpt-oss
+  litellm_params:
+    model: ollama/gpt-oss:20b
+    api_base: os.environ/OLLAMA_BASE_URL
+    price: [0, 0]
+    thinking:
+      type: enabled
+    merge_reasoning_content_in_choices: true
+  model_info:
+    supports_function_calling: true
+- model_name: qwen3
+  litellm_params:
+    model: ollama/qwen3:latest
+    api_base: os.environ/OLLAMA_BASE_URL
+    price: [0, 0]
+    thinking:
+      type: enabled
+    merge_reasoning_content_in_choices: true
+  model_info:
+    supports_function_calling: true
+- model_name: deepseek-r1
+  litellm_params:
+    model: ollama/deepseek-r1:latest
+    api_base: os.environ/OLLAMA_BASE_URL
+    price: [0, 0]
+    thinking:
+      type: enabled
+    merge_reasoning_content_in_choices: true
+  model_info:
+    supports_function_calling: true
+
+router_settings:
+  num_retries: 1
+  routing_strategy: latency-based-routing
+  enable_post_call_check: true
+  routing_strategy_args:
+    ttl: 600
+  timeout: 600
+general_settings:
+  alerting_threshold: 5
+  database_connection_pool_limit: 100
+  database_connection_timeout: 60
+  disable_reset_budget: true
+  health_check_interval: 60
+  telemetry: true
+  ui_access_mode: admin_only
+  master_key: os.environ/LITELLM_MASTER_KEY
+  store_model_in_db: true
+  store_prompts_in_spend_logs: true
+  turn_off_message_logging: false
+  otel: false
+  track_cost_per_request: true
+  enable_budget_alerts: true
+  pass_through_endpoints: []
+
+litellm_settings:
+  drop_params: true

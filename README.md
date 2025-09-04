@@ -4,18 +4,24 @@ Automation and AI assistant orchestration utilities: a minimal Python 3.12+ tool
 
 ## Directory Tree
 ```
-.                       # Repository root
-├── .editorconfig       # Editor formatting baseline
-├── .gitignore          # Git ignore patterns
-├── .tool-versions      # asdf toolchain pins (python, etc.)
-├── LICENSE             # MIT license
-├── LLM.md              # Root LLM orchestration & README authoring rules
-├── pyproject.toml      # Project metadata, dependencies, build config (hatchling + uv)
-├── src/                # All Python source (single-source layout root)
-│   ├── LLM.md          # Python style & tooling guide (authoritative technical rules)
-│   └── copilot_agents/ # Primary package namespace
-│       └── __init__.py # Package marker / version exposure placeholder
-└── .github/            # GitHub configuration & AI workflow guardrails (workflows, instructions)
+.                                   # Repository root
+├── .editorconfig                   # Editor formatting baseline
+├── .gitignore                      # Git ignore patterns
+├── .pre-commit-config.yaml         # Pre-commit hook definitions (lint, format, etc.)
+├── .tool-versions                  # asdf toolchain pins (python, etc.)
+├── LICENSE                         # MIT license
+├── LLM.md                          # Root LLM orchestration & README authoring rules
+├── git-conventional-commits.yaml   # Conventional commit message lint configuration
+├── pyproject.toml                  # Project metadata, dependencies, build config (hatchling + uv)
+├── deploy/                         # Deployment artifacts (LiteLLM config & compose stack)
+│   ├── docker-compose.yaml         # Minimal LiteLLM + Postgres compose (no Redis)
+│   ├── litellm-config.yaml         # LiteLLM routing & model configuration
+│   └── LLM.md                      # Deployment-specific LLM guidance (docker-compose, Colima notes)
+├── src/                            # All Python source (single-source layout root)
+│   ├── LLM.md                      # Python style & tooling guide (authoritative technical rules)
+│   └── copilot_agents/             # Primary package namespace
+│       └── __init__.py             # Package marker / version exposure placeholder
+└── .github/                        # GitHub configuration & AI workflow guardrails (workflows, instructions)
 ```
 
 ## Tools
@@ -24,7 +30,7 @@ Automation and AI assistant orchestration utilities: a minimal Python 3.12+ tool
 - Build backend: hatchling
 - Lint & format: Ruff
 - Testing: pytest
-- Env management: direnv (+ `.envrc` / `.envrc.example` pattern)
+- Env management: direnv (+ `.envrc` pattern)
 
 ## Developer Setup
 ```shell

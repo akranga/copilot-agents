@@ -1,0 +1,64 @@
+x-common-config: &common-config
+  extra_hosts:
+    - host.docker.internal:host-gateway
+  # networks: [host]
+  restart: unless-stopped
+
+services:
+  postgres:
+    <<: *common-config
+    image: postgres:16
+    container_name: litellm-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: litellm
+      POSTGRES_USER: litellm
+      POSTGRES_PASSWORD: litellm
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+  litellm:
+    <<: *common-config
+    image: ghcr.io/berriai/litellm:latest
+    container_name: litellm-server
+    depends_on:
+      postgres:
+        condition: service_healthy
+      wait-ollama:
+        condition: service_completed_successfully
+    ports:
+      - "4000:4000"  # LiteLLM REST API
+    environment:
+      DATABASE_URL: postgresql://litellm:litellm@postgres:5432/litellm
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-dev-master-key}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+    command: [
+      "--port", "4000",
+      "--config", "/config.yaml", "--detailed_debug",
+    ]
+    volumes:
+      - ./litellm-config.yaml:/app/litellm-config.yaml:ro
+    restart: unless-stopped
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+
+  wait-ollama:
+    <<: *common-config
+    image: dokku/wait
+    restart: "on-failure"
+    command: ["-c", "host.docker.internal:11434", -t, "60"]
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+
+volumes:
+  postgres_data:
+    driver: local
