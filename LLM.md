@@ -15,7 +15,7 @@ When merging conflicting guidance, directory-local `LLM.md` overrides root `LLM.
 2. When to follow subdirectory `LLM.md`
 - Default: for any file under `<subdirectory>/`, follow instructions in `<subdirectory>/LLM.md`.
 - Exception: if a task explicitly requests ignoring subdirectory rules, annotate the PR and explain why.
-- If subdirectory `LLM.md` conflicts with `LLM-PYTHON.md`, follow `LLM-PYTHON.md` and record the conflict in PR description.
+- If a subdirectory `LLM.md` conflicts with `/src/LLM.md` (Python style guide), follow `/src/LLM.md` and record the conflict in the PR description.
 
 3. Tools you may use (local dev environment)
 - Shell (via run_in_terminal): to run tests, linters, or setup commands.
@@ -35,7 +35,7 @@ When merging conflicting guidance, directory-local `LLM.md` overrides root `LLM.
 
 5. Commit & PR conventions for LLM
 - Keep diffs small and focused.
-- Update `LLM-PYTHON.md` when introducing new conventions.
+- Update `/src/LLM.md` when introducing new Python conventions.
 - Add tests for behavioral changes.
 - Document any deviations from global rules in the PR body.
 
@@ -59,6 +59,46 @@ When merging conflicting guidance, directory-local `LLM.md` overrides root `LLM.
 ---
 
 If you find any `LLM.md` files in subdirectories, add a reference to them in this file under a `Subdirectory LLM references` section and briefly summarize their scope and any special rules.
+
+### README Authoring (MUST-FOLLOW)
+Purpose: Standardize creation & maintenance of `README.md` files. Applies globally unless overridden explicitly.
+
+General rules:
+- A `README.md` in the repository root is the root README; any `README.md` inside a subdirectory documents that directory and all of its descendant subdirectories (scoped).
+- Documentation must be concise, technical, and human-readable. Avoid filler.
+- Do NOT invent new chapters/sections beyond the mandatory list unless explicitly instructed by a user or an existing directory `LLM.md` rule.
+- Mandatory chapter order (exact, no extras unless authorized):
+	1. H1 Title (single `#` heading) — short, specific.
+	2. Concise summary paragraph (what the reader sees / purpose of this subtree).
+	3. Directory Tree section (heading `## Directory Tree`) containing a current listing of this directory and all nested non-empty subdirectories/files (exclude: empty directories and anything ignored by `.gitignore`). Each entry MUST end with ` # <one-line summary>` explaining its role.
+- The directory tree MUST stay up-to-date whenever files are added, removed, or renamed. Update before completing a PR that changes structure.
+- Generate the baseline tree with the `tree` command (example root usage shown below) then manually append one-line summaries:
+	- Example (root): `tree -F -I '.git|.venv' .` (adjust `-I` to exclude patterns from `.gitignore`; never list ignored files).
+	- Remove any empty directory lines from the output.
+	- Append ` # <summary>` to each listed path (files and directories).
+- Always read the existing Directory Tree before making structural changes to ensure consistency and to update summaries if semantics change.
+
+Root `README.md` additional mandatory chapters (after Directory Tree):
+	4. Tools (heading `## Tools`) — brief bullet list of primary languages, package managers, linters, test frameworks.
+	5. Developer Setup (heading `## Developer Setup`) — fenced `shell` code block with minimal reproducible setup commands (e.g., version manager install, dependency sync, test run). Keep only authoritative, working commands; no commentary inside the block other than `#` inline clarifications.
+
+Subdirectory `README.md` differences:
+- Omit the root-only "Tools" and "Developer Setup" sections unless the subtree introduces additional, localized tools; if so, explicitly state they are local to that subtree.
+- Title should reflect the directory path or component name.
+
+Prohibited unless explicitly requested:
+- Adding marketing fluff, badges, or unrelated sections (e.g., Roadmap, FAQ) without an instruction.
+- Auto-generated trees that include ignored or empty directories.
+
+If instructed to remove (delete) a previously mandated chapter:
+- Create (or update) an `LLM.md` in that directory documenting the deletion rule so automation does not reintroduce it. State: `(YYYY-MM-DD) <Chapter Name> removed by request; do not recreate unless explicitly reinstated.`
+
+Validation checklist before committing a README change:
+- [ ] Mandatory chapters present in correct order.
+- [ ] Tree excludes ignored + empty dirs, includes summaries.
+- [ ] Root-only sections included (root) or excluded (subdirectory) appropriately.
+- [ ] No unauthorized chapters added.
+- [ ] Commands in Developer Setup verified locally.
 
 ### Additional remembered instructions
 - (2025-09-04) MUST-FOLLOW: Maintain cross-file deduplication across `LLM.md` and all `**/LLM*.md` files. Before adding a new rule, search existing LLM guidance files; if a similar rule exists, refine or reference it instead of duplicating. Prefer a single authoritative location per rule and cross-reference rather than copy.

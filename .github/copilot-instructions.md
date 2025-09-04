@@ -3,10 +3,10 @@
 Status: Repository scaffold (Python project not yet initialized). This file gives high-level AI contribution rules. Language/tooling specifics (Python, etc.) live in language style guide files referenced from `LLM.md` and must NOT be duplicated here.
 
 ## Mandatory Read First
-Before writing or editing code you MUST read root `LLM.md`. That file lists active language guides (e.g., `LLM-PYTHON.md`) which you must also read before touching related files. If guidance conflicts: technical style (language guide) > orchestration (`LLM.md`) > this file. When introducing or modifying a convention, update the relevant language guide and (if process changes) `LLM.md` in the same PR.
+Before writing or editing code you MUST read root `LLM.md`. That file lists active language guides (e.g., `src/LLM.md` for Python) which you must also read before touching related files. If guidance conflicts: technical style (language guide) > orchestration (`LLM.md`) > this file. When introducing or modifying a convention, update the relevant language guide and (if process changes) `LLM.md` in the same PR.
 
 ## Scope of This File
-This document focuses on: AI workflow guardrails, change discipline, and when to update the style guide. It intentionally omits concrete commands already captured in `LLM-PYTHON.md`.
+This document focuses on: AI workflow guardrails, change discipline, and when to update the style guide. It intentionally omits concrete commands already captured in `src/LLM.md`.
 
 ## Core AI Workflow
 1. Read `LLM.md` (always re-check if repo recently changed) plus any language guides it references.
@@ -39,7 +39,7 @@ This document focuses on: AI workflow guardrails, change discipline, and when to
 - Commits reference introduced conventions when applicable.
 
 ## Escalation / Ambiguity Handling
-If a task requires a new convention (e.g., background job runner abstraction) and no precedent exists: (a) implement minimal viable pattern, (b) document it in the appropriate language guide (e.g., `LLM-PYTHON.md`), (c) reference the new section in the PR description.
+If a task requires a new convention (e.g., background job runner abstraction) and no precedent exists: (a) implement minimal viable pattern, (b) document it in the appropriate language guide (e.g., `src/LLM.md`), (c) reference the new section in the PR description.
 
 ## Quick Checklist for Any PR
 -- [ ] Followed relevant language guide(s) referenced by `LLM.md`.

@@ -1,0 +1,48 @@
+[project]
+name = "copilot-agents"
+version = "0.1.0"
+description = "Automation and AI assistant orchestration utilities."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+authors = [ { name = "Maintainers" } ]
+license = { file = "LICENSE" }
+keywords = ["ai","automation","copilot","agents"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+
+# No runtime dependencies yet; add via `uv add <pkg>`
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/akranga/copilot-agents"
+Repository = "https://github.com/akranga/copilot-agents"
+
+[build-system]
+requires = ["hatchling>=1.21.0"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+# Development-time dependencies only (not included for end users)
+# Add more with: uv add --dev <pkg>
+"dev-dependencies" = [
+    "pytest>=8.2.0",
+    "ruff>=0.5.0"
+]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E","F","I","B"]
+
+[tool.ruff.format]
+quote-style = "preserve"

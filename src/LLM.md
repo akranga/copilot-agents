@@ -1,6 +1,4 @@
-# LLM-PYTHON (Python + uv + asdf)
-
-(MOVED from root `LLM-PYTHON.md` on 2025-09-04; update root `LLM.md` references accordingly.)
+# Python Project Conventions (uv + asdf)
 
 Authoritative source for Python project conventions. Keep this file current; update alongside any tooling or structural change. Copilot / AI agents must reference this, not reinvent patterns.
 
@@ -30,11 +28,11 @@ uv run ruff format .                      # format code
 
 ## 4. Directory & Module Layout
 - All importable Python code MUST reside under `src/` (single source layout). Do not create top-level packages at repository root.
-- Primary application package lives at `src/app/` (create early as needed).
+- Primary application package lives at `src/copilot_agents/` (named after the uv project). Use this as the root namespace.
 - Tests: `tests/unit/` (fast, hermetic) and `tests/integration/` (may touch I/O, external services mocked or containerized).
 - PYTHONPATH must include `./src` (CI, local dev, and test commands). Prefer environment variable (`PYTHONPATH=./src`) or tooling config rather than sys.path mutation.
 - Avoid side effects at import time (no network / disk writes). Use `if __name__ == "__main__":` for CLI entrypoints.
-- Central configuration: `src/app/config.py` loads environment variables (use `python-dotenv` only if truly needed). Provide `.env.example`.
+- Central configuration: `src/copilot_agents/config.py` loads environment variables (use `python-dotenv` only if truly needed). Provide `.env.example`.
 
 ## 5. Dependency Management
 - Prefer stdlib first. Justify any new third-party dependency in PR description.
@@ -55,8 +53,8 @@ uv run ruff format .                      # format code
 - Keep import grouping default; avoid manual sorting.
 
 ## 8. Logging & Errors
-- Implement `app/logging.py` with a `get_logger(name: str)` returning a structured JSON logger (e.g., stdlib `logging` + custom JSON formatter; avoid extra deps initially).
-- Central exception types in `app/errors.py` (e.g., `AppError`, domain-specific subclasses). Catch narrowly; avoid blanket `except Exception`.
+- Implement `copilot_agents/logging.py` with a `get_logger(name: str)` returning a structured JSON logger (e.g., stdlib `logging` + custom JSON formatter; avoid extra deps initially).
+- Central exception types in `copilot_agents/errors.py` (e.g., `AppError`, domain-specific subclasses). Catch narrowly; avoid blanket `except Exception`.
 
 ## 9. Configuration
 - Use `direnv` (`.envrc`) to load environment variables locally. Provide a tracked `.envrc.example` (placeholders, no secrets). Do NOT add `.env` or `.env.*` files; they are disallowed. If migrating from `.env`, move keys into `.envrc.example` with exports.
